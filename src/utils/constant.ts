@@ -1,9 +1,9 @@
 export const SIGN_IN_FORM = [
 	{
 		label: 'Your Email',
-		type: 'Email',
-		name: 'Email',
-		id: 'Email',
+		type: 'email',
+		name: 'email',
+		id: 'email',
 		placeholder: 'name@company.com'
 	},
 	{
@@ -18,16 +18,16 @@ export const SIGN_IN_FORM = [
 export const SIGN_UP_FORM = [
 	{
 		label: 'Your Email',
-		type: 'Email',
-		name: 'Email',
-		id: 'Email',
+		type: 'email',
+		name: 'email',
+		id: 'email',
 		placeholder: 'name@company.com'
 	},
 	{
 		label: 'Your Name',
 		type: 'text',
-		name: 'text',
-		id: 'text',
+		name: 'name',
+		id: 'name',
 		placeholder: 'Kevin Rowland'
 	},
 	{
@@ -40,8 +40,8 @@ export const SIGN_UP_FORM = [
 	{
 		label: 'Confirm',
 		type: 'password',
-		name: 'password',
-		id: 'password',
+		name: 'confirm',
+		id: 'confirm',
 		placeholder: '••••••••'
 	}
 ]

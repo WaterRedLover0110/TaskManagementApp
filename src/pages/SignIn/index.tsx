@@ -1,9 +1,24 @@
-import FormExtra from "../../components/FormExtra";
-import FormHeader from "../../components/FormHeader";
-import FormInput from "../../components/FormInput";
+import { useFormik } from "formik";
+
+import { FormExtra, FormHeader, FormInput } from "../../components";
+import { LoginFormState } from "../../types";
+
+import { loginSchema } from "../../utils/yupSchema";
 import { SIGN_IN_FORM } from "../../utils/constant";
 
 const SignIn = () => {
+  const {handleChange, handleSubmit, values, errors} = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validationSchema: loginSchema,
+    validateOnChange: true,
+    onSubmit: () => {
+      alert(JSON.stringify(values))
+    }
+  })
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -13,9 +28,15 @@ const SignIn = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               {SIGN_IN_FORM.map((item, index) => (
-                <FormInput {...item} key={`sign-in-form-${index}`}/>
+                <FormInput
+                  {...item}
+                  key={`sign-in-form-${index}`}
+                  value={values[item.name as keyof LoginFormState]}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
               ))}
               <FormExtra />
               <button
@@ -41,4 +62,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn
+export default SignIn;
