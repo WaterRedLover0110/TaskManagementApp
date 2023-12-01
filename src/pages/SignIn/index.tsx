@@ -5,8 +5,12 @@ import { LoginFormState } from "../../types";
 
 import { loginSchema } from "../../utils/yupSchema";
 import { SIGN_IN_FORM } from "../../utils/constant";
+import authService from "../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+
   const {handleChange, handleSubmit, values, errors} = useFormik({
     initialValues: {
       email: '',
@@ -14,8 +18,14 @@ const SignIn = () => {
     },
     validationSchema: loginSchema,
     validateOnChange: true,
-    onSubmit: () => {
-      alert(JSON.stringify(values))
+    onSubmit: async () => {
+      try {
+        const result = await authService.signIn(values);
+        alert("Successfully Logged In!");
+        navigate('/');
+      } catch (error) {
+        alert(JSON.stringify(error));
+      }
     }
   })
 

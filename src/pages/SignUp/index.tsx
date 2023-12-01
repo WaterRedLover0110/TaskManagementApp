@@ -4,8 +4,11 @@ import { SIGN_UP_FORM } from "../../utils/constant";
 import { registerSchema } from "../../utils/yupSchema";
 import { RegisterFormState } from "../../types";
 import authService from "../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
 	const {handleChange, handleSubmit, values, errors} = useFormik({
     initialValues: {
       email: '',
@@ -18,7 +21,8 @@ const SignUp = () => {
     onSubmit: async () => {
       try {
         const result = await authService.signUp(values);
-        alert(JSON.stringify(result)) 
+        alert('Successfully Registered');
+        navigate('/signin');
       } catch (error) {
         alert(JSON.stringify(error))
       }
