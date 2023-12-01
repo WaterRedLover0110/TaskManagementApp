@@ -1,5 +1,4 @@
-import React from 'react';
-import logo from './logo.svg';
+import SignIn from './pages/SignIn';
 import './App.css';
 
 function App() {
