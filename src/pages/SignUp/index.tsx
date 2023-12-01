@@ -3,6 +3,7 @@ import { FormHeader, FormInput } from "../../components";
 import { SIGN_UP_FORM } from "../../utils/constant";
 import { registerSchema } from "../../utils/yupSchema";
 import { RegisterFormState } from "../../types";
+import authService from "../../services/authService";
 
 const SignUp = () => {
 	const {handleChange, handleSubmit, values, errors} = useFormik({
@@ -14,8 +15,13 @@ const SignUp = () => {
     },
     validationSchema: registerSchema,
     validateOnChange: true,
-    onSubmit: () => {
-      alert(JSON.stringify(values))
+    onSubmit: async () => {
+      try {
+        const result = await authService.signUp(values);
+        alert(JSON.stringify(result)) 
+      } catch (error) {
+        alert(JSON.stringify(error))
+      }
     }
   })
 
