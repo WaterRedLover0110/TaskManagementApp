@@ -1,81 +1,65 @@
 import { useState } from "react";
-import { DragDropContext , Droppable, Draggable, DroppableProvided, DraggableProvided, DropResult } from 'react-beautiful-dnd';
-
-interface Type{
-	name: string,
-	key: string
-}
+import {
+  DragDropContext,
+  DropResult,
+} from "@hello-pangea/dnd";
+import { mockData } from "../../utils/mock";
+import { KanbanColumn } from "../../components/KanbanBoard";
+import { KanbanDataResponseTypes } from "../../types";
 
 const Home = () => {
-	const arr = [
-		{
-			name: "North",
-			key: "12353",
-		},
-		{
-			name: "South",
-			key: "23463",
-		},
-		{
-			name: "East",
-			key: "54643",
-		},
-		{
-			name: "West",
-			key: "4435",
-		},
-	];
+  // const arr = [
+  // 	{
+  // 		name: "North",
+  // 		key: "12353",
+  // 	},
+  // 	{
+  // 		name: "South",
+  // 		key: "23463",
+  // 	},
+  // 	{
+  // 		name: "East",
+  // 		key: "54643",
+  // 	},
+  // 	{
+  // 		name: "West",
+  // 		key: "4435",
+  // 	},
+  // ];
 
-	const [project, setProject] = useState<Type []>(arr);
+  const [project, setProject] = useState<KanbanDataResponseTypes>(mockData);
 
-	const reorder = (list: any, startIndex: number, endIndex: number) => {
-		const result: Type[] = Array.from(list);
-		const [removed] = result.splice(startIndex, 1);
-		result.splice(endIndex, 0, removed);
-		return result;
-	};
+  const onDragEnd = (result: DropResult) => {
+    const {source, destination} = result;
+    if (!destination) return;
+    if (destination.index === source.index && destination.droppableId === source.droppableId) return;
+    
+    let destinationArray = Array.from(project[destination.droppableId]);
+    let sourceArray = Array.from(project[source.droppableId]);
+    let newProjectData = {...project};
 
-	const onDragEnd = (result: DropResult) => {
-		if (!result.destination) return;
-    if (result.destination.index === result.source.index) return;
-		const projects = reorder(
-      project,
-      result.source.index,
-      result.destination.index
-    );
-    //store reordered state.
-    setProject(projects)
-	}
+    const itemInserted = sourceArray[source.index];
 
-	return (
-		<>
-			Hello! This is Stacklok.
-			<DragDropContext onDragEnd={onDragEnd}>
-				<Droppable droppableId="list">
-					{
-						(provided: DroppableProvided) => (
-							<div ref={provided.innerRef} {...provided.droppableProps}>
-								{
-									project && project.map((item, index) => (
-										<Draggable draggableId={item.key} key={item.key} index={index}>
-											{
-												(provided: DraggableProvided) => (
-													<div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-														<p style={{color: 'green'}}>{item.name}</p>
-													</div>
-												)
-											}
-										</Draggable>
-									))
-								}
-								{provided.placeholder}
-							</div>
-						)
-					}
-				</Droppable>
-			</DragDropContext>
-		</>
-	)
+    sourceArray.splice(source.index, 1);
+    destinationArray.splice(destination.index ?? destinationArray.length + 1, 0, itemInserted);
+    newProjectData = {...newProjectData, [source.droppableId]: sourceArray, [destination.droppableId]: destinationArray};
+
+    setProject(newProjectData);
+  };
+
+  return (
+    <div className="bg-gray-200 w-full h-full">
+			<div className="flex p-4">
+				<DragDropContext onDragEnd={onDragEnd}>
+					{Object.entries(project).map(([key, value], index) => {
+						return (
+							<KanbanColumn text={key} lists={value} key={`kanban-row-${index}`} />
+						);
+					})}
+				</DragDropContext>
+			</div>
+    </div>
+  );
 };
 
 export default Home;
