@@ -20,18 +20,18 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               className="w-6 h-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
               />
             </svg>
           </div>
-          <img src={data.image} className="rounded-xl" />
+          <img src={data.image} className="rounded-xl" alt='Image'/>
           <div className="kanban-content mb-2">
             <p className="text-indigo-500 text-base py-2">{data.title}</p>
             <p className="text-gray-700 text-sm break-words text-ellipsis whitespace-pre-line overflow-hidden w-full h-12 leading-6">
@@ -52,13 +52,13 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 className="w-6 h-6 inline"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>

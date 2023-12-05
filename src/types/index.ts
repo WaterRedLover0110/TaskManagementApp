@@ -57,6 +57,11 @@ export interface KanbanRowHeaderProps {
   text: string
 }
 
-export interface KanbanDataResponseTypes {
+export interface KanbanDataTypes {
   [key: string]: KanbanItemTypes []
+}
+
+export interface KanbanColumnTypes {
+  id: number,
+  title: string
 }

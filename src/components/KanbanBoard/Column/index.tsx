@@ -1,4 +1,3 @@
-import { Draggable, DraggableProvided } from "react-beautiful-dnd";
 import {
   KanbanItemTypes,
   KanbanRowHeaderProps,
@@ -11,19 +10,33 @@ const KanbanRowHeader = ({ text }: KanbanRowHeaderProps) => {
   return (
     <div className="flex justify-between p-4 w-full bg-white rounded-2xl text-lg">
       <p className="leading-8 text-indigo-500">{text}</p>
-      <button className="bg-slate-200 hover:bg-slate-300 p-2 rounded inline-flex items-center">
-        <svg
+      <button className="hover:bg-slate-300 p-2 rounded inline-flex items-center">
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          strokeWidth="1.5"
           stroke="currentColor"
           className="w-4 h-4 text-indigo-500"
         >
           <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             d="M12 4.5v15m7.5-7.5h-15"
+          />
+        </svg> */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-4 h-4"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
           />
         </svg>
       </button>
@@ -34,7 +47,7 @@ const KanbanRowHeader = ({ text }: KanbanRowHeaderProps) => {
 const KanbanColumn = ({ text, lists }: KanbanRowProps) => {
   return (
     <div className="row-container p-2 w-96">
-      <KanbanRowHeader text={text} />
+      <KanbanRowHeader text={`${text} (${lists.length} items)`} />
       <Droppable droppableId={text} key={text}>
         {(provided: DroppableProvided) => (
           <div
