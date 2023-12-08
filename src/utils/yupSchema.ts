@@ -15,3 +15,8 @@ export const registerSchema = Yup.object().shape({
   password: Yup.string().required("The password is required"),
   confirm: Yup.string().required("The field is required"),
 });
+
+export const newTaskSchema = Yup.object().shape({
+  title: Yup.string().required("This field is required!"),
+  description: Yup.string().required("This field is required!"),  
+})

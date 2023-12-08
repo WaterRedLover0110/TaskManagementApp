@@ -6,62 +6,113 @@ export interface LoginFormState {
 }
 
 export interface RegisterFormState {
-	email: string;
-	name: string;
-	password: string;
-	confirm: string;
+  email: string;
+  name: string;
+  password: string;
+  confirm: string;
 }
 
-export interface FormInputProps {
+export interface FormBaseProps {
   label: string;
-  type: string;
   name: string;
   id: string;
   placeholder: string;
+  value?: string;
+  handleChange?: any;
+  errors?: any;
+  required: boolean;
+}
+
+export interface FormInputProps extends FormBaseProps {
+  type: string;
+}
+
+export interface FormTextAreaProps extends FormBaseProps {
+  rows: number;
+}
+
+export interface FormDateSelectProps extends FormBaseProps {}
+
+export interface FormSelectItemProps {
   value: string;
+  label: string;
+}
+
+export interface FormSelectProps {
+  label: string;
+  name: string;
+  id: string;
+  lists: FormSelectItemProps[];
+  value?: string;
+  handleChange?: any;
+  errors?: any;
+  required: boolean;
+}
+
+export interface FormImageUploaderProps {
+  label: string;
+  name: string;
+  id: string;
   handleChange: any;
-  errors: any;
 }
 
 export interface KanbanSubTaskItemTypes {
-  id: string,
-  parentId: string,
-  content: string,
-  isDone: boolean
+  content: string;
+  isDone: boolean;
 }
 
-export interface KanbanItemTypes{
-  id: string,
-  title: string,
-  description: string,
-  subTask: KanbanSubTaskItemTypes [],
-  image: string,
-  urgency: number,
-  user: string,
-  status: number,
-  isDeleted: boolean,
-  type: number
+export interface KanbanSubTaskRecordTypes extends KanbanSubTaskItemTypes {
+  id: string;
+  parentId: string;
+}
+
+export interface KanbanItemTypes {
+  id: string;
+  title: string;
+  description: string;
+  subTask: KanbanSubTaskRecordTypes[];
+  image: string;
+  urgency: number;
+  user: string;
+  status: number;
+  isDeleted: boolean;
+  type: number;
+}
+
+export interface KanbanTypeTypes {
+  value: string;
+  label: string;
+}
+
+export interface KanbanUrgencyTypes {
+  value: string;
+  label: string;
 }
 
 export interface KanbanRowProps {
-  text: string,
-  lists: KanbanItemTypes []
+  text: string;
+  lists: KanbanItemTypes[];
 }
 
 export interface KanbanItemProps {
-  data: KanbanItemTypes
-  index: number
+  data: KanbanItemTypes;
+  index: number;
 }
 
 export interface KanbanRowHeaderProps {
-  text: string
+  text: string;
 }
 
 export interface KanbanDataTypes {
-  [key: string]: KanbanItemTypes []
+  [key: string]: KanbanItemTypes[];
 }
 
 export interface KanbanColumnTypes {
-  id: number,
-  title: string
+  id: number;
+  title: string;
+}
+
+export interface KanbanUserTypes {
+  uid: string;
+  email: string;
 }

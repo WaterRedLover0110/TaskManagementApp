@@ -11,20 +11,6 @@ const KanbanRowHeader = ({ text }: KanbanRowHeaderProps) => {
     <div className="flex justify-between p-4 w-full bg-white rounded-2xl text-lg">
       <p className="leading-8 text-indigo-500">{text}</p>
       <button className="hover:bg-slate-300 p-2 rounded inline-flex items-center">
-        {/* <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          className="w-4 h-4 text-indigo-500"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg> */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

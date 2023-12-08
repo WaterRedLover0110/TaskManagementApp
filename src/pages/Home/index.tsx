@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { mockData } from "../../utils/mock";
 import { KanbanColumn } from "../../components/KanbanBoard";
 import {
   KanbanColumnTypes,
@@ -12,6 +11,7 @@ import { generateKanbanData } from "../../utils/tasks";
 import { useDispatch } from "react-redux";
 
 import { setKanbanData } from "../../store/tasks";
+import AddTaskModal from "../../components/AddTaskModal";
 
 const Home = () => {
   // const [project, setProject] = useState<KanbanDataTypes>(mockData);
@@ -28,11 +28,11 @@ const Home = () => {
     if (tasks.length && columns.length) {
       dispatch(setKanbanData(generateKanbanData(tasks, columns)));
     }
-  }, [tasks, columns]);
+  }, [tasks, columns, dispatch]);
 
   const handleNew = () => {
     setIsNewModal(true);
-  }
+  };
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -49,17 +49,30 @@ const Home = () => {
 
     const itemInserted = sourceArray[source.index];
 
-    sourceArray.splice(source.index, 1);
-    destinationArray.splice(
-      destination.index ?? destinationArray.length + 1,
-      0,
-      itemInserted
-    );
-    newProjectData = {
-      ...newProjectData,
-      [source.droppableId]: sourceArray,
-      [destination.droppableId]: destinationArray,
-    };
+    if (destination.droppableId === source.droppableId) {
+      sourceArray.splice(source.index, 1);
+      sourceArray.splice(
+        destination.index ?? sourceArray.length + 1,
+        0,
+        itemInserted
+      );
+      newProjectData = {
+        ...newProjectData,
+        [source.droppableId]: sourceArray,
+      };
+    } else {
+      sourceArray.splice(source.index, 1);
+      destinationArray.splice(
+        destination.index ?? destinationArray.length + 1,
+        0,
+        itemInserted
+      );
+      newProjectData = {
+        ...newProjectData,
+        [source.droppableId]: sourceArray,
+        [destination.droppableId]: destinationArray,
+      };
+    }
 
     dispatch(setKanbanData(newProjectData));
   };
@@ -86,9 +99,9 @@ const Home = () => {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>
@@ -130,13 +143,14 @@ const Home = () => {
             New Task
           </button>
         </div>
+        
         <div className="flex">
           <DragDropContext onDragEnd={onDragEnd}>
-            {Object.entries(kanbanTasks).map(([key, value], index) => {
+            {columns?.map(({ id, title }, index) => {
               return (
                 <KanbanColumn
-                  text={key}
-                  lists={value}
+                  text={title}
+                  lists={kanbanTasks[title] || []}
                   key={`kanban-row-${index}`}
                 />
               );
@@ -144,6 +158,7 @@ const Home = () => {
           </DragDropContext>
         </div>
       </div>
+      {isNewModal && <AddTaskModal />}
     </div>
   );
 };

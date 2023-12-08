@@ -1,6 +1,6 @@
 import { FormInputProps } from "../../types";
 
-const FormInput = ({label, type, name, id, placeholder, value, handleChange}: FormInputProps) => {
+const FormInput = ({label, type, name, id, placeholder, value, handleChange, required}: FormInputProps) => {
   return (
     <div>
       <label
@@ -8,6 +8,9 @@ const FormInput = ({label, type, name, id, placeholder, value, handleChange}: Fo
         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
       >
         {label}
+        {
+          required && '*'
+        }
       </label>
       <input
         type={type}
@@ -17,6 +20,7 @@ const FormInput = ({label, type, name, id, placeholder, value, handleChange}: Fo
         placeholder={placeholder}
 				value={value}
 				onChange={handleChange}
+        required
       />
     </div>
   );
