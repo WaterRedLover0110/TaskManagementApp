@@ -45,7 +45,8 @@ const SignUp = () => {
                   key={`sign-up-form-${index}`}
                   value={values[item.name as keyof RegisterFormState]}
                   handleChange={handleChange}
-                  errors={errors}
+                  error={errors[item.name as keyof RegisterFormState]}
+                  required
                 />
               ))}
               <button

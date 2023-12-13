@@ -7,9 +7,12 @@ import { loginSchema } from "../../utils/yupSchema";
 import { SIGN_IN_FORM } from "../../utils/constant";
 import authService from "../../services/authService";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/user";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {handleChange, handleSubmit, values, errors} = useFormik({
     initialValues: {
@@ -22,6 +25,8 @@ const SignIn = () => {
       try {
         const result = await authService.signIn(values);
         alert("Successfully Logged In!");
+        //await setUser(result);
+        dispatch(setUser({uid: result.user.uid, email: result.user.email}))
         navigate('/');
       } catch (error) {
         alert(JSON.stringify(error));
@@ -45,7 +50,8 @@ const SignIn = () => {
                   key={`sign-in-form-${index}`}
                   value={values[item.name as keyof LoginFormState]}
                   handleChange={handleChange}
-                  errors={errors}
+                  error={errors[item.name as keyof LoginFormState]}
+                  required
                 />
               ))}
               <FormExtra />
