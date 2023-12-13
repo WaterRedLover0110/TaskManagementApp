@@ -1,34 +1,19 @@
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import { fetchTasks, getKanbanTasks, getTasks, updateTask } from "../store/tasks";
-import { useEffect } from "react";
-import { fetchColumns, getColumns } from "../store/columns";
-import { fetchTypes, getTypes } from "../store/types";
-import { fetchUrgency, getUrgency } from "../store/urgency";
+import { getKanbanTasks, getTasks } from "../store/tasks";
+import { getColumns } from "../store/columns";
+import { getTypes } from "../store/types";
+import { getUrgency } from "../store/urgency";
+import { KanbanUserTypes } from "../types";
 
 export const useGetTasks = () => {
-  const dispatch = useDispatch();
   const tasks = useSelector((state: RootState) => getTasks(state));
-
-  useEffect(() => {
-    if (!tasks || tasks.length === 0) {
-      dispatch(fetchTasks("tasks/fetchTasks"));
-    }
-  }, [tasks, dispatch]);
 
   return tasks;
 };
 
 export const useGetColumns = () => {
-  const dispatch = useDispatch();
   const columns = useSelector((state: RootState) => getColumns(state));
-
-  useEffect(() => {
-    if (!columns || columns.length === 0) {
-      dispatch(fetchColumns("columns/fetchColumns"));
-    }
-  }, [columns, dispatch]);
 
   return columns;
 };
@@ -40,27 +25,13 @@ export const useGetKanbanTasks = () => {
 };
 
 export const useGetTypes = () => {
-  const dispatch = useDispatch();
   const types = useSelector((state: RootState) => getTypes(state));
-
-  useEffect(() => {
-    if (!types || types.length === 0) {
-      dispatch(fetchTypes("types/fetchTypes"));
-    }
-  }, [types, dispatch]);
 
   return types;
 };
 
 export const useGetUrgency = () => {
-  const dispatch = useDispatch();
   const urgency = useSelector((state: RootState) => getUrgency(state));
-
-  useEffect(() => {
-    if (!urgency || urgency.length === 0) {
-      dispatch(fetchUrgency("urgency/fetchUrgency"));
-    }
-  }, [urgency, dispatch]);
 
   return urgency;
 };
@@ -69,4 +40,9 @@ export const useGetUser = () => {
   const user = useSelector((state: RootState) => state.user.value);
 
   return user;
+}
+export const useGetTheme = () => {
+  const isDarkMode = useSelector((state: RootState) => state.user.isDarkMode);
+  
+  return !!isDarkMode;
 }

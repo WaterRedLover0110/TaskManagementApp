@@ -14,7 +14,7 @@ class FileUploaderService {
           const percent =
             Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         },
-        (error) => console.log(error),
+        (error) => reject(error),
         async () => {
           const result = await getDownloadURL(uploadTask.snapshot.ref);
           

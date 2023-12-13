@@ -11,37 +11,16 @@ import FormInput from "../FormInput";
 import FormTextArea from "../FormTextArea";
 import FormImageUploader from "../FormImageUploader";
 import FormSelect from "../FormSelect";
-import { useGetTasks, useGetTypes, useGetUrgency } from "../../hooks";
+import { useGetColumns, useGetTasks, useGetTypes, useGetUrgency } from "../../hooks";
 import FormDateSelect from "../FormDateSelect";
 import fileUploaderService from "../../services/fileUploadService";
 import taskService from "../../services/taskService";
 
-const AddTaskModal = ({ handleCloseModal }: any) => {
-  const [subTaskText, setSubTaskText] = useState<string>("");
-  const [subTasks, setSubTasks] = useState<KanbanSubTaskItemTypes[]>([]);
-
+const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) => {
   const tasks: KanbanItemTypes[] = useGetTasks();
   const types: KanbanTypeTypes[] = useGetTypes();
   const urgency: KanbanUrgencyTypes[] = useGetUrgency();
-  const [fileName, setFileName] = useState("");
-
-  const handleNewSubTask = () => {
-    setSubTasks([...subTasks, { content: subTaskText, isDone: false }]);
-    setSubTaskText("");
-  };
-
-  const handleSubTaskInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSubTaskText(event.target.value);
-  };
-
-  const handleItemStateChange = (index: number) => {
-    const newSubTasks = [...subTasks];
-    newSubTasks[index].isDone = !newSubTasks[index].isDone;
-
-    setSubTasks(newSubTasks);
-  };
+  const columns = useGetColumns();
 
   const {
     handleChange,
@@ -51,42 +30,51 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
     setFieldValue,
     isSubmitting,
   } = useFormik({
-    initialValues: {
-      title: "",
-      description: "",
-      image: "",
-      dueDate: "",
-      type: "",
-      urgency: "",
-      subTasks: [],
-      file: null,
-    },
+    initialValues,
     validationSchema: newTaskSchema,
     validateOnChange: true,
     onSubmit: async () => {
       try {
-        const result = await fileUploaderService.uploadImage(values.file);
+        let result: any = '';
+        if(values.file)
+          result = await fileUploaderService.uploadImage(values.file);
         const { file, ...payload } = values;
-        await taskService.addTask(
-          {
-            ...payload,
-            isDeleted: false,
-            status: 0,
-            userId: "012312",
-            image: result,
-            order: tasks.length
-          },
-          tasks.length
-        );
+        if(!isEdit) {
+          await taskService.addTask(
+            {
+              ...payload,
+              isDeleted: false,
+              status: columns.filter(item => item.id === 0)[0].title,
+              userId: "012312",
+              image: result,
+              order: tasks.length
+            }
+          );
+        } else {
+          await taskService.updateTask({...payload, image: values.file ? result : values.image}, values.id);
+        }
+        handleCloseModal();
       } catch (error) {
         alert(JSON.stringify(error));
       }
     },
   });
 
+  const handleNewSubTask = () => {
+    if(values.subTaskText === "") return;
+    setFieldValue('subTasks', [...values.subTasks, { content: values.subTaskText, isDone: false }]);
+    setFieldValue('subTaskText', '');
+  };
+
+  const handleItemStateChange = (index: number) => {
+    const newSubTasks = values.subTasks.map((item: KanbanSubTaskItemTypes, ind: number) => ind === index ? {...item, isDone: !item.isDone} : item);
+
+    setFieldValue('subTasks', newSubTasks);
+  };
+
   const handleUpload = (event: any) => {
-    setFieldValue("file", event.target.files[0]);
-    setFileName(event.target.files[0].name);
+    setFieldValue('file', event.target.files[0]);
+    setFieldValue('fileName', event.target.files[0].name);
   };
 
   return (
@@ -94,13 +82,13 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
       id="crud-modal"
       tabIndex={-1}
       aria-hidden="true"
-      className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-200 bg-opacity-80"
+      className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-100vh max-h-full bg-gray-200 bg-opacity-80"
     >
       <div className="relative w-full max-w-3xl max-h-full">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Create New Task
+              {isEdit ? 'Edit Task' :'Create New Task'}
             </h3>
             <button
               type="button"
@@ -135,7 +123,7 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                   name="title"
                   id="title"
                   placeholder="Type Title"
-                  value={values["title"]}
+                  value={values.title}
                   handleChange={handleChange}
                   required
                 />
@@ -147,7 +135,7 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                   id="description"
                   placeholder="Type Description"
                   rows={4}
-                  value={values["description"]}
+                  value={values.description}
                   handleChange={handleChange}
                   required
                 />
@@ -159,7 +147,7 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                   id="file"
                   handleChange={handleUpload}
                 />
-                {values.file && <div>{fileName}</div>}
+                {values.file && <input name='fileName' value={values.fileName} readOnly disabled/>}
               </div>
               <div className="col-span-3 sm:col-span-1">
                 <FormDateSelect
@@ -167,7 +155,7 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                   name="dueDate"
                   id="dueDate"
                   placeholder="2023/12/07"
-                  value={values["dueDate"]}
+                  value={values.dueDate}
                   handleChange={handleChange}
                   required
                 />
@@ -178,7 +166,7 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                   id="type"
                   name="type"
                   lists={types}
-                  value={values["type"]}
+                  value={values.type}
                   handleChange={handleChange}
                   required
                 />
@@ -189,7 +177,7 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                   id="urgency"
                   name="urgency"
                   lists={urgency}
-                  value={values["urgency"]}
+                  value={values.urgency}
                   handleChange={handleChange}
                   required
                 />
@@ -201,10 +189,10 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                 >
                   Sub Tasks
                 </label>
-                <div className="bg-gray-50">
+                <div className="bg-gray-50 dark:bg-gray-700">
                   {
                     <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white mb-2">
-                      {subTasks.map(
+                      {values.subTasks.map(
                         (item: KanbanSubTaskItemTypes, index: number) => {
                           return (
                             <li
@@ -235,13 +223,13 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                   <input
                     type="text"
                     id="company"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none"
                     placeholder="Enter Sub Task..."
-                    value={subTaskText}
-                    onChange={handleSubTaskInputChange}
+                    name="subTaskText"
                   />
                   <button
-                    className="flex items-center w-full rounded-lg font-medium text-sm text-center p-2.5"
+                    type="button"
+                    className="flex items-center w-full rounded-lg font-medium text-sm text-center p-2.5 dark:bg-gray-600 dark:text-gray-300"
                     onClick={handleNewSubTask}
                   >
                     <svg
@@ -277,7 +265,7 @@ const AddTaskModal = ({ handleCloseModal }: any) => {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              Add new task
+              {isEdit ? 'Update task' : 'Add new task'}
             </button>
           </form>
         </div>

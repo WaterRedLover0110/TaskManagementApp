@@ -70,14 +70,15 @@ export interface KanbanItemTypes {
   id: string;
   title: string;
   description: string;
-  subTask: KanbanSubTaskRecordTypes[];
+  subTasks: KanbanSubTaskRecordTypes[];
   image: string;
-  urgency: number;
+  urgency: string;
   user: string;
   status: number;
   isDeleted: boolean;
-  type: number;
+  type: string;
   order: number;
+  dueDate: string;
 }
 
 export interface KanbanTypeTypes {

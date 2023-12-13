@@ -20,13 +20,12 @@ class TaskService {
     }
   };
 
-  addTask = async (item: any, len: number) => {
+  addTask = async (item: any) => {
+    console.log('634', item);
     try {
       const docRef = await addDoc(collection(db, 'tasks'), {
         ...item
       });
-      const orderRef = doc(collection(db, 'orders'), len.toString());
-      await setDoc(orderRef, {taskId: docRef.id});
     } catch (error) {
       throw error;
     }
@@ -40,6 +39,14 @@ class TaskService {
         order: (destBeforeOrder + destNextOrder) / 2,
         status: destinationStatus
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  updateTask = async (item: any, id: string) => {
+    try {
+      await updateDoc(doc(db, 'tasks', id), item);
     } catch (error) {
       throw error;
     }

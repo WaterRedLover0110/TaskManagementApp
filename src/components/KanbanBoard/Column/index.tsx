@@ -8,16 +8,16 @@ import { Droppable, DroppableProvided } from "@hello-pangea/dnd";
 
 const KanbanRowHeader = ({ text }: KanbanRowHeaderProps) => {
   return (
-    <div className="flex justify-between p-4 w-full bg-white rounded-2xl text-lg">
-      <p className="leading-8 text-indigo-500">{text}</p>
-      <button className="hover:bg-slate-300 p-2 rounded inline-flex items-center">
+    <div className="flex justify-between items-center px-4 py-2 w-full bg-white rounded-2xl text-lg dark:bg-gray-800">
+      <p className="leading-8 text-indigo-500 dark:text-gray-400 text-sm">{text}</p>
+      <button className="hover:bg-slate-300 dark:hover:bg-slate-600 dark:hover:text-gray-400 dark:text-gray-200 p-2 rounded inline-flex items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
           stroke="currentColor"
-          className="w-4 h-4"
+          className="w-6 h-6"
         >
           <path
             strokeLinecap="round"
@@ -32,12 +32,12 @@ const KanbanRowHeader = ({ text }: KanbanRowHeaderProps) => {
 
 const KanbanColumn = ({ text, lists }: KanbanRowProps) => {
   return (
-    <div className="row-container p-2 w-96">
+    <div className="row-container p-2 flex-1 flex flex-col">
       <KanbanRowHeader text={`${text} (${lists.length} items)`} />
       <Droppable droppableId={text} key={text}>
         {(provided: DroppableProvided) => (
           <div
-            className="kanban-lists min-h-[50px] bg-gray-200 p-2 mt-4"
+            className="kanban-lists min-h-[50px] bg-gray-200 p-2 mt-4 flex-1 dark:bg-gray-800"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >

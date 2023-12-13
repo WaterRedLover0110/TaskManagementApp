@@ -18,5 +18,5 @@ export const registerSchema = Yup.object().shape({
 
 export const newTaskSchema = Yup.object().shape({
   title: Yup.string().required("This field is required!"),
-  description: Yup.string().required("This field is required!"),  
+  description: Yup.string().required("This field is required!"),
 })

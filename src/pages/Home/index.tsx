@@ -10,8 +10,23 @@ import { useGetColumns, useGetKanbanTasks, useGetTasks } from "../../hooks";
 import { generateKanbanData } from "../../utils/tasks";
 import { useDispatch } from "react-redux";
 
-import { setKanbanData, updateTask } from "../../store/tasks";
+import { fetchTasks, setKanbanData, updateTask } from "../../store/tasks";
 import AddTaskModal from "../../components/AddTaskModal";
+import { fetchTypes } from "../../store/types";
+import { fetchUrgency } from "../../store/urgency";
+import { fetchColumns } from "../../store/columns";
+import { Header, SideBar } from "../../components";
+
+const initialValues = {
+  title: "",
+  description: "",
+  image: "",
+  dueDate: "",
+  type: "",
+  urgency: "",
+  subTasks: [],
+  file: null,
+}
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -24,8 +39,15 @@ const Home = () => {
   const kanbanTasks: KanbanDataTypes = useGetKanbanTasks();
 
   useEffect(() => {
+    dispatch(fetchTasks('tasks/fetchTasks'));
+    dispatch(fetchTypes('types/fetchTypes'));
+    dispatch(fetchUrgency('urgency/fetchUrgency'));
+    dispatch(fetchColumns('columns/fetchColumns'));
+  }, [])
+
+  useEffect(() => {
     if (tasks.length && columns.length) {
-      dispatch(setKanbanData(generateKanbanData(tasks, columns)));
+      dispatch(setKanbanData(generateKanbanData(tasks)));
     }
   }, [tasks, columns, dispatch]);
 
@@ -129,9 +151,11 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-gray-100 w-full h-full">
-      <div className="content p-4">
-        <div className="flex justify-between">
+    <div className="bg-gray-100 w-full h-full flex dark:bg-slate-700">
+      <SideBar />
+      <div className="content flex-1">
+        <Header />
+        <div className="flex justify-between p-4">
           <form className="w-96">
             <label
               htmlFor="default-search"
@@ -195,7 +219,7 @@ const Home = () => {
           </button>
         </div>
 
-        <div className="flex">
+        <div className="flex px-4">
           <DragDropContext onDragEnd={onDragEnd}>
             {columns?.map(({ id, title }, index) => {
               return (
@@ -209,7 +233,7 @@ const Home = () => {
           </DragDropContext>
         </div>
       </div>
-      {isNewModal && <AddTaskModal handleCloseModal={handleCloseModal} />}
+      {isNewModal && <AddTaskModal handleCloseModal={handleCloseModal} initialValues={initialValues}/>}
     </div>
   );
 };
