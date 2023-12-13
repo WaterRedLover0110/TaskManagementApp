@@ -37,7 +37,7 @@ const KanbanColumn = ({ text, lists }: KanbanRowProps) => {
       <Droppable droppableId={text} key={text}>
         {(provided: DroppableProvided) => (
           <div
-            className="kanban-lists"
+            className="kanban-lists min-h-[50px] bg-gray-200 p-2 mt-4"
             ref={provided.innerRef}
             {...provided.droppableProps}
           >

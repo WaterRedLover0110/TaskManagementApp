@@ -52,6 +52,9 @@ const FormImageUploader = ({
           />
         </label>
       </div>
+      <div>
+        {}
+      </div>
     </>
   );
 };

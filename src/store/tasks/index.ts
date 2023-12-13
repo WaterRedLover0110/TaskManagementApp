@@ -18,6 +18,15 @@ export const fetchTasks = createAsyncThunk<KanbanItemTypes[], string>(
   }
 );
 
+export const updateTask = createAsyncThunk<boolean, any>(
+  "tasks/updateTasks", 
+  async(updatedData) => {
+    const {source, destinationBefore, destinationNext, destinationStatus}: any = updatedData;
+    const result = await taskService.updateItem(source, destinationBefore, destinationNext, destinationStatus);
+    return true;
+  }
+)
+
 export const taskSlice = createSlice({
   name: "tasks",
   initialState: {

@@ -77,6 +77,7 @@ export interface KanbanItemTypes {
   status: number;
   isDeleted: boolean;
   type: number;
+  order: number;
 }
 
 export interface KanbanTypeTypes {

@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import { fetchTasks, getKanbanTasks, getTasks } from "../store/tasks";
+import { fetchTasks, getKanbanTasks, getTasks, updateTask } from "../store/tasks";
 import { useEffect } from "react";
 import { fetchColumns, getColumns } from "../store/columns";
 import { fetchTypes, getTypes } from "../store/types";

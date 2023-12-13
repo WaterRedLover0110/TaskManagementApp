@@ -10,11 +10,10 @@ import { useGetColumns, useGetKanbanTasks, useGetTasks } from "../../hooks";
 import { generateKanbanData } from "../../utils/tasks";
 import { useDispatch } from "react-redux";
 
-import { setKanbanData } from "../../store/tasks";
+import { setKanbanData, updateTask } from "../../store/tasks";
 import AddTaskModal from "../../components/AddTaskModal";
 
 const Home = () => {
-  // const [project, setProject] = useState<KanbanDataTypes>(mockData);
   const dispatch = useDispatch();
 
   const [isNewModal, setIsNewModal] = useState(false);
@@ -43,11 +42,50 @@ const Home = () => {
     )
       return;
 
-    let destinationArray = Array.from(kanbanTasks[destination.droppableId]);
-    let sourceArray = Array.from(kanbanTasks[source.droppableId]);
+    const tempDestination = kanbanTasks[destination.droppableId] || [];
+
+    console.log(source, destination, kanbanTasks);
+
+    let destinationBefore: number = 0;
+    let destinationNext: number = 0;
+
+    if (source.droppableId === destination.droppableId) {
+      destinationBefore =
+        destination.index === 0
+          ? 0
+          : source.index < destination.index
+          ? tempDestination[destination.index].order
+          : tempDestination[destination.index - 1].order;
+
+      destinationNext =
+        destination.index === tempDestination.length - 1
+          ? tempDestination[destination.index].order + 1
+          : source.index < destination.index
+          ? tempDestination[destination.index + 1].order
+          : tempDestination[destination.index].order;
+    } else {
+      destinationBefore =
+        destination.index === 0
+          ? 0
+          : tempDestination[destination.index - 1].order;
+      destinationNext =
+        destination.index === tempDestination.length
+          ? destination.index === 0
+            ? 0
+            : tempDestination[destination.index - 1].order + 1
+          : tempDestination[destination.index].order;
+    }
+
+    let destinationArray = Array.from(
+      kanbanTasks[destination.droppableId] || []
+    );
+    let sourceArray = Array.from(kanbanTasks[source.droppableId] || []);
     let newProjectData = { ...kanbanTasks };
 
-    const itemInserted = sourceArray[source.index];
+    const itemInserted = {
+      ...sourceArray[source.index],
+      order: (destinationBefore + destinationNext) / 2,
+    };
 
     if (destination.droppableId === source.droppableId) {
       sourceArray.splice(source.index, 1);
@@ -74,7 +112,20 @@ const Home = () => {
       };
     }
 
+    dispatch(
+      updateTask({
+        source: kanbanTasks[source.droppableId][source.index],
+        destinationBefore,
+        destinationNext,
+        destinationStatus: destination.droppableId,
+      })
+    );
+
     dispatch(setKanbanData(newProjectData));
+  };
+
+  const handleCloseModal = () => {
+    setIsNewModal(false);
   };
 
   return (
@@ -143,7 +194,7 @@ const Home = () => {
             New Task
           </button>
         </div>
-        
+
         <div className="flex">
           <DragDropContext onDragEnd={onDragEnd}>
             {columns?.map(({ id, title }, index) => {
@@ -158,7 +209,7 @@ const Home = () => {
           </DragDropContext>
         </div>
       </div>
-      {isNewModal && <AddTaskModal />}
+      {isNewModal && <AddTaskModal handleCloseModal={handleCloseModal} />}
     </div>
   );
 };

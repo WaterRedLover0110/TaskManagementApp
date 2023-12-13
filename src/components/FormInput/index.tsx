@@ -9,7 +9,7 @@ const FormInput = ({label, type, name, id, placeholder, value, handleChange, req
       >
         {label}
         {
-          required && '*'
+          required && ' *'
         }
       </label>
       <input
