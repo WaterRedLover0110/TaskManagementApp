@@ -61,7 +61,7 @@ Simple Kanban board app like Jira.
 ## 📂 Repository Structure
 
 ```sh
-└── stacklok/
+└── TaskManagementApp/
     ├── src/
     │   ├── components/
     │   ├── hooks/

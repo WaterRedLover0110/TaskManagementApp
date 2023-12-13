@@ -1,10 +1,10 @@
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../utils/firebase";
 
 class ColumnService {
 	getAll = async () => {
 		try {
-			const doc_refs = await getDocs(query(collection(db, 'columns')));
+			const doc_refs = await getDocs(query(collection(db, 'columns'), orderBy('id')));
 			const res: any = [];
 			doc_refs.forEach(column => {
 				res.push({
@@ -12,7 +12,7 @@ class ColumnService {
 				})
 			});
 
-			return res;	
+			return res;
 		} catch (error) {
 			throw error;
 		}

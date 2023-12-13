@@ -21,12 +21,16 @@ import {
 import FormDateSelect from "../FormDateSelect";
 import fileUploaderService from "../../services/fileUploadService";
 import taskService from "../../services/taskService";
+import { useDispatch } from "react-redux";
+import { fetchTasks } from "../../store/tasks";
 
 const AddTaskModal = ({
   handleCloseModal,
   initialValues,
   isEdit = false,
 }: any) => {
+  const dispatch = useDispatch();
+
   const user: any = useGetUser();
   const tasks: KanbanItemTypes[] = useGetTasks();
   const types: KanbanTypeTypes[] = useGetTypes();
@@ -67,6 +71,7 @@ const AddTaskModal = ({
           );
         }
         handleCloseModal();
+        dispatch(fetchTasks(user?.uid))
       } catch (error) {
         alert(JSON.stringify(error));
       }
