@@ -123,8 +123,8 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
               </p>
             </div>
             {!!data.dueDate && (
-              <div className="kanban-date border-solid border border-gray-200 inline-block rounded-lg px-2 mb-2">
-                <p className="text-sm text-indigo-500 inline">{data.dueDate}</p>
+              <div className="kanban-date border-solid border border-gray-200 dark:border-gray-600 inline-block rounded-lg px-2 mb-2">
+                <p className="text-sm text-indigo-500 dark:text-gray-400 inline">{data.dueDate}</p>
               </div>
             )}
             <br />
@@ -169,7 +169,7 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
       {showDialog && (
         <AddTaskModal
           handleCloseModal={handleCloseModal}
-          initialValues={{ ...data, file: null }}
+          initialValues={{ ...data, file: null, subTaskText: "" }}
           isEdit
         />
       )}

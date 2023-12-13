@@ -1,11 +1,11 @@
-import { addDoc, collection, doc, getDocs, orderBy, query, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { KanbanItemTypes } from "../types";
 
 class TaskService {
-  getAll = async () => {
+  getAll = async (uid: string) => {
     try {
-      const doc_refs = await getDocs(query(collection(db, "tasks"), orderBy('order')));
+      const doc_refs = await getDocs(query(collection(db, "tasks"), where('userId', '==', uid)));
       const res: any = [];
       doc_refs.forEach((task) => {
         res.push({
@@ -14,18 +14,18 @@ class TaskService {
         });
       });
 
-      return res;
+      return res.sort((a: number, b: number) => a - b);
     } catch (error) {
       throw error;
     }
   };
 
   addTask = async (item: any) => {
-    console.log('634', item);
     try {
       const docRef = await addDoc(collection(db, 'tasks'), {
         ...item
       });
+
     } catch (error) {
       throw error;
     }

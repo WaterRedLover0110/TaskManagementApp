@@ -6,7 +6,7 @@ import {
   KanbanDataTypes,
   KanbanItemTypes,
 } from "../../types";
-import { useGetColumns, useGetKanbanTasks, useGetTasks } from "../../hooks";
+import { useGetColumns, useGetKanbanTasks, useGetTasks, useGetUser } from "../../hooks";
 import { generateKanbanData } from "../../utils/tasks";
 import { useDispatch } from "react-redux";
 
@@ -25,6 +25,7 @@ const initialValues = {
   type: "",
   urgency: "",
   subTasks: [],
+  subTaskText: "",
   file: null,
 }
 
@@ -33,13 +34,14 @@ const Home = () => {
 
   const [isNewModal, setIsNewModal] = useState(false);
 
+  const user: any = useGetUser();
   const tasks: KanbanItemTypes[] = useGetTasks();
   const columns: KanbanColumnTypes[] = useGetColumns();
 
   const kanbanTasks: KanbanDataTypes = useGetKanbanTasks();
 
   useEffect(() => {
-    dispatch(fetchTasks('tasks/fetchTasks'));
+    dispatch(fetchTasks(user?.uid));
     dispatch(fetchTypes('types/fetchTypes'));
     dispatch(fetchUrgency('urgency/fetchUrgency'));
     dispatch(fetchColumns('columns/fetchColumns'));
@@ -151,7 +153,7 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-gray-100 w-full h-full flex dark:bg-slate-700">
+    <div className="bg-gray-100 w-full h-full min-h-screen flex dark:bg-slate-700">
       <SideBar />
       <div className="content flex-1">
         <Header />

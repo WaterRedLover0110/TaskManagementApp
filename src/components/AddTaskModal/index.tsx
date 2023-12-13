@@ -11,12 +11,23 @@ import FormInput from "../FormInput";
 import FormTextArea from "../FormTextArea";
 import FormImageUploader from "../FormImageUploader";
 import FormSelect from "../FormSelect";
-import { useGetColumns, useGetTasks, useGetTypes, useGetUrgency } from "../../hooks";
+import {
+  useGetColumns,
+  useGetTasks,
+  useGetTypes,
+  useGetUrgency,
+  useGetUser,
+} from "../../hooks";
 import FormDateSelect from "../FormDateSelect";
 import fileUploaderService from "../../services/fileUploadService";
 import taskService from "../../services/taskService";
 
-const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) => {
+const AddTaskModal = ({
+  handleCloseModal,
+  initialValues,
+  isEdit = false,
+}: any) => {
+  const user: any = useGetUser();
   const tasks: KanbanItemTypes[] = useGetTasks();
   const types: KanbanTypeTypes[] = useGetTypes();
   const urgency: KanbanUrgencyTypes[] = useGetUrgency();
@@ -29,29 +40,31 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
     errors,
     setFieldValue,
     isSubmitting,
+    isValid,
   } = useFormik({
     initialValues,
     validationSchema: newTaskSchema,
     validateOnChange: true,
     onSubmit: async () => {
       try {
-        let result: any = '';
-        if(values.file)
+        let result: any = "";
+        if (values.file)
           result = await fileUploaderService.uploadImage(values.file);
-        const { file, ...payload } = values;
-        if(!isEdit) {
-          await taskService.addTask(
-            {
-              ...payload,
-              isDeleted: false,
-              status: columns.filter(item => item.id === 0)[0].title,
-              userId: "012312",
-              image: result,
-              order: tasks.length
-            }
-          );
+        const { file, subTaskText, ...payload } = values;
+        if (!isEdit) {
+          await taskService.addTask({
+            ...payload,
+            isDeleted: false,
+            status: columns.filter((item) => item.id === 0)[0].title,
+            userId: user.uid,
+            image: result,
+            order: tasks.length,
+          });
         } else {
-          await taskService.updateTask({...payload, image: values.file ? result : values.image}, values.id);
+          await taskService.updateTask(
+            { ...payload, image: values.file ? result : values.image },
+            values.id
+          );
         }
         handleCloseModal();
       } catch (error) {
@@ -61,20 +74,26 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
   });
 
   const handleNewSubTask = () => {
-    if(values.subTaskText === "") return;
-    setFieldValue('subTasks', [...values.subTasks, { content: values.subTaskText, isDone: false }]);
-    setFieldValue('subTaskText', '');
+    if (values.subTaskText === "") return;
+    setFieldValue("subTasks", [
+      ...values.subTasks,
+      { content: values.subTaskText, isDone: false },
+    ]);
+    setFieldValue("subTaskText", "");
   };
 
   const handleItemStateChange = (index: number) => {
-    const newSubTasks = values.subTasks.map((item: KanbanSubTaskItemTypes, ind: number) => ind === index ? {...item, isDone: !item.isDone} : item);
+    const newSubTasks = values.subTasks.map(
+      (item: KanbanSubTaskItemTypes, ind: number) =>
+        ind === index ? { ...item, isDone: !item.isDone } : item
+    );
 
-    setFieldValue('subTasks', newSubTasks);
+    setFieldValue("subTasks", newSubTasks);
   };
 
   const handleUpload = (event: any) => {
-    setFieldValue('file', event.target.files[0]);
-    setFieldValue('fileName', event.target.files[0].name);
+    setFieldValue("file", event.target.files[0]);
+    setFieldValue("fileName", event.target.files[0].name);
   };
 
   return (
@@ -88,7 +107,7 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              {isEdit ? 'Edit Task' :'Create New Task'}
+              {isEdit ? "Edit Task" : "Create New Task"}
             </h3>
             <button
               type="button"
@@ -149,7 +168,14 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
                   id="file"
                   handleChange={handleUpload}
                 />
-                {values.file && <input name='fileName' value={values.fileName} readOnly disabled/>}
+                {values.file && (
+                  <input
+                    name="fileName"
+                    value={values.fileName}
+                    readOnly
+                    disabled
+                  />
+                )}
               </div>
               <div className="col-span-3 sm:col-span-1">
                 <FormDateSelect
@@ -225,12 +251,15 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
                       )}
                     </ul>
                   }
-                  <input
+                  <FormInput
+                    label="SubTask"
                     type="text"
-                    id="company"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none"
-                    placeholder="Enter Sub Task..."
                     name="subTaskText"
+                    id="subTaskText"
+                    placeholder="Type Sub Task"
+                    value={values.subTaskText}
+                    handleChange={handleChange}
+                    showLabel={false}
                   />
                   <button
                     type="button"
@@ -256,21 +285,39 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
             </div>
             <button
               type="submit"
-              className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-red-800"
+              disabled={!isValid}
             >
-              <svg
-                className="me-1 -ms-1 w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-              {isEdit ? 'Update task' : 'Add new task'}
+              {isEdit ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="me-1 -ms-1 w-5 h-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="me-1 -ms-1 w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              )}
+              {isEdit ? "Update task" : "Add new task"}
             </button>
           </form>
         </div>

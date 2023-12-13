@@ -20,7 +20,8 @@ export interface FormBaseProps {
   value?: string;
   handleChange?: any;
   error?: any;
-  required: boolean;
+  required?: boolean;
+  showLabel?: boolean;
 }
 
 export interface FormInputProps extends FormBaseProps {

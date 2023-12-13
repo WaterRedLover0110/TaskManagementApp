@@ -8,9 +8,9 @@ import type { RootState } from "../store";
 
 export const fetchTasks = createAsyncThunk<KanbanItemTypes[], string>(
   "tasks/fetchTasks",
-  async () => {
+  async (uid: string) => {
     try {
-      const result = await taskService.getAll();
+      const result = await taskService.getAll(uid);
       return result;
     } catch (error) {
       throw error;
