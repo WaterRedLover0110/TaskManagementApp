@@ -1,6 +1,6 @@
 import { FormSelectProps } from "../../types";
 
-const FormSelect = ({ label, id, lists, value, handleChange, required }: FormSelectProps) => {
+const FormSelect = ({ label, id, lists, value, handleChange, required, error }: FormSelectProps) => {
   return (
     <>
       <label
@@ -25,6 +25,7 @@ const FormSelect = ({ label, id, lists, value, handleChange, required }: FormSel
           </option>
         ))}
       </select>
+      <span className="text-red-800 dark:text-red-400 text-sm">{error}</span>
     </>
   );
 };

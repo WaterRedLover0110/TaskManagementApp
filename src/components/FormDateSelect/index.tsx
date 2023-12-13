@@ -1,6 +1,6 @@
 import { FormDateSelectProps } from "../../types";
 
-const FormDateSelect = ({label, id, name, placeholder, value, handleChange}: FormDateSelectProps) => {
+const FormDateSelect = ({label, id, name, placeholder, value, handleChange, error}: FormDateSelectProps) => {
   return (
     <>
       <label
@@ -18,6 +18,7 @@ const FormDateSelect = ({label, id, name, placeholder, value, handleChange}: For
 				value={value}
 				onChange={handleChange}
       />
+      <span className="text-red-800 dark:text-red-400 text-sm">{error}</span>
     </>
   );
 };

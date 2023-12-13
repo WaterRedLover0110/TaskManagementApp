@@ -16,10 +16,10 @@ export interface FormBaseProps {
   label: string;
   name: string;
   id: string;
-  placeholder: string;
+  placeholder?: string;
   value?: string;
   handleChange?: any;
-  errors?: any;
+  error?: any;
   required: boolean;
 }
 
@@ -38,15 +38,8 @@ export interface FormSelectItemProps {
   label: string;
 }
 
-export interface FormSelectProps {
-  label: string;
-  name: string;
-  id: string;
+export interface FormSelectProps extends FormBaseProps{
   lists: FormSelectItemProps[];
-  value?: string;
-  handleChange?: any;
-  errors?: any;
-  required: boolean;
 }
 
 export interface FormImageUploaderProps {

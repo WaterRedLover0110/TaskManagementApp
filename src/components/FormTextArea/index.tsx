@@ -8,7 +8,8 @@ const FormTextArea = ({
   label,
   id,
   rows,
-  required
+  required,
+  error
 }: FormTextAreaProps) => {
   return (
     <div>
@@ -29,7 +30,9 @@ const FormTextArea = ({
         value={value}
 				rows={rows}
         onChange={handleChange}
+        required
       />
+      <span className="text-red-800 dark:text-red-400 text-sm">{error}</span>
     </div>
   );
 };

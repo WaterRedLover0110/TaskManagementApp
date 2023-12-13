@@ -50,7 +50,7 @@ const SignIn = () => {
                   key={`sign-in-form-${index}`}
                   value={values[item.name as keyof LoginFormState]}
                   handleChange={handleChange}
-                  errors={errors}
+                  error={errors[item.name as keyof LoginFormState]}
                   required
                 />
               ))}

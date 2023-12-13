@@ -1,6 +1,6 @@
 import { FormInputProps } from "../../types";
 
-const FormInput = ({label, type, name, id, placeholder, value, handleChange, required}: FormInputProps) => {
+const FormInput = ({label, type, name, id, placeholder, value, handleChange, required, error=''}: FormInputProps) => {
   return (
     <div>
       <label
@@ -22,6 +22,7 @@ const FormInput = ({label, type, name, id, placeholder, value, handleChange, req
 				onChange={handleChange}
         required
       />
+      <span className="text-red-800 dark:text-red-400 text-sm">{error}</span>
     </div>
   );
 };

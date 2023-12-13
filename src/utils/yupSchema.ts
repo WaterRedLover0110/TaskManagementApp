@@ -17,6 +17,9 @@ export const registerSchema = Yup.object().shape({
 });
 
 export const newTaskSchema = Yup.object().shape({
-  title: Yup.string().required("This field is required!"),
-  description: Yup.string().required("This field is required!"),
+  title: Yup.string().required("Title is required!"),
+  description: Yup.string().required("Description is required!"),
+  dueDate: Yup.string().required("Due date is required!"),
+  type: Yup.string().required("Type is required."),
+  urgency: Yup.string().required("Urgency is required"),
 })

@@ -126,6 +126,7 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
                   value={values.title}
                   handleChange={handleChange}
                   required
+                  error={errors.title}
                 />
               </div>
               <div className="col-span-3">
@@ -138,6 +139,7 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
                   value={values.description}
                   handleChange={handleChange}
                   required
+                  error={errors.description}
                 />
               </div>
               <div className="col-span-3">
@@ -158,6 +160,7 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
                   value={values.dueDate}
                   handleChange={handleChange}
                   required
+                  error={errors.dueDate}
                 />
               </div>
               <div className="sm:col-span-1 col-span-3">
@@ -169,6 +172,7 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
                   value={values.type}
                   handleChange={handleChange}
                   required
+                  error={errors.type}
                 />
               </div>
               <div className="col-span-3 sm:col-span-1">
@@ -180,6 +184,7 @@ const AddTaskModal = ({ handleCloseModal, initialValues, isEdit = false }: any) 
                   value={values.urgency}
                   handleChange={handleChange}
                   required
+                  error={errors.urgency}
                 />
               </div>
               <div className="col-span-3">
