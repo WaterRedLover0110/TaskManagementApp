@@ -27,12 +27,12 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
 
   const urgency = useMemo(
     () => urgencyList.filter((item) => item.value === data.urgency)[0]?.label,
-    [urgencyList]
+    [urgencyList, data.urgency]
   );
 
   const type = useMemo(
     () => typesList.filter((item) => item.value === data.type)[0]?.label,
-    [typesList]
+    [typesList, data.type]
   );
 
   const handleMenuClick = () => {

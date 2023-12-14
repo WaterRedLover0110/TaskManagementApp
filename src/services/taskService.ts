@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { KanbanItemTypes } from "../types";
 
@@ -22,10 +22,11 @@ class TaskService {
 
   addTask = async (item: any) => {
     try {
-      const docRef = await addDoc(collection(db, 'tasks'), {
+      await addDoc(collection(db, 'tasks'), {
         ...item
       });
 
+      return true;
     } catch (error) {
       throw error;
     }
@@ -35,10 +36,11 @@ class TaskService {
     try {
       const destBeforeOrder = destinationBefore;
       const destNextOrder = destinationNext;
-      const sourceRef = await updateDoc(doc(db, 'tasks', source.id), {
+      await updateDoc(doc(db, 'tasks', source.id), {
         order: (destBeforeOrder + destNextOrder) / 2,
         status: destinationStatus
       });
+      return true;
     } catch (error) {
       throw error;
     }

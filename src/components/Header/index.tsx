@@ -85,7 +85,6 @@ const Header = () => {
               >
                 <li>
                   <a
-                    href="#"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     Profile
@@ -93,7 +92,6 @@ const Header = () => {
                 </li>
                 <li onClick={handleLogout}>
                   <a
-                    href="#"
                     className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >
                     Logout

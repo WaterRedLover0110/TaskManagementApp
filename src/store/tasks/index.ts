@@ -21,9 +21,13 @@ export const fetchTasks = createAsyncThunk<KanbanItemTypes[], string>(
 export const moveTask = createAsyncThunk<boolean, any>(
   "tasks/updateTasks", 
   async(updatedData) => {
-    const {source, destinationBefore, destinationNext, destinationStatus}: any = updatedData;
-    const result = await taskService.moveTask(source, destinationBefore, destinationNext, destinationStatus);
-    return true;
+    try {
+      const {source, destinationBefore, destinationNext, destinationStatus}: any = updatedData;
+      await taskService.moveTask(source, destinationBefore, destinationNext, destinationStatus);
+      return true; 
+    } catch (error) {
+      throw error;
+    }
   }
 )
 

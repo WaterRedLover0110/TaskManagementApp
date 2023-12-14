@@ -49,7 +49,7 @@ const Home = () => {
     dispatch(fetchUrgency('urgency/fetchUrgency'));
     dispatch(fetchColumns('columns/fetchColumns'));
     setIsLoading(false);
-  }, [])
+  }, [dispatch, user?.uid])
 
   useEffect(() => {
     if (tasks.length && columns.length) {
