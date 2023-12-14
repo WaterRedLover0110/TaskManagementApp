@@ -1,13 +1,18 @@
 import { Draggable, DraggableProvided } from "@hello-pangea/dnd";
 import { KanbanItemProps, KanbanSubTaskRecordTypes } from "../../../types";
 import { useMemo, useState } from "react";
-import { useGetTypes, useGetUrgency } from "../../../hooks";
+import { useGetTypes, useGetUrgency, useGetUser } from "../../../hooks";
 import AddTaskModal from "../../AddTaskModal";
+import { useDispatch } from "react-redux";
+import { deleteTask, fetchTasks } from "../../../store/tasks";
 
 const KanbanItem = ({ data, index }: KanbanItemProps) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const user: any = useGetUser();
   const urgencyList = useGetUrgency();
   const typesList = useGetTypes();
 
@@ -19,6 +24,7 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
     () => calculateCompletedSubTask(data.subTasks),
     [data.subTasks]
   );
+
   const urgency = useMemo(
     () => urgencyList.filter((item) => item.value === data.urgency)[0]?.label,
     [urgencyList]
@@ -39,6 +45,8 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
   };
 
   const handleDelete = () => {
+    dispatch(deleteTask(data.id));
+    dispatch(fetchTasks(user?.uid));
     setShowMenu(false);
   };
 

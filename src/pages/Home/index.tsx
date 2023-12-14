@@ -10,7 +10,7 @@ import { useGetColumns, useGetKanbanTasks, useGetTasks, useGetUser } from "../..
 import { generateKanbanData } from "../../utils/tasks";
 import { useDispatch } from "react-redux";
 
-import { fetchTasks, setKanbanData, updateTask } from "../../store/tasks";
+import { fetchTasks, setKanbanData, moveTask } from "../../store/tasks";
 import AddTaskModal from "../../components/AddTaskModal";
 import { fetchTypes } from "../../store/types";
 import { fetchUrgency } from "../../store/urgency";
@@ -141,7 +141,7 @@ const Home = () => {
     }
 
     dispatch(
-      updateTask({
+      moveTask({
         source: kanbanTasks[source.droppableId][source.index],
         destinationBefore,
         destinationNext,

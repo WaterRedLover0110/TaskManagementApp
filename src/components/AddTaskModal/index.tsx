@@ -22,7 +22,7 @@ import FormDateSelect from "../FormDateSelect";
 import fileUploaderService from "../../services/fileUploadService";
 import taskService from "../../services/taskService";
 import { useDispatch } from "react-redux";
-import { fetchTasks } from "../../store/tasks";
+import { addTask, fetchTasks, updateTask } from "../../store/tasks";
 import LoadingComponent from "../LoadingComponent";
 
 const AddTaskModal = ({
@@ -57,22 +57,26 @@ const AddTaskModal = ({
           result = await fileUploaderService.uploadImage(values.file);
         const { file, subTaskText, ...payload } = values;
         if (!isEdit) {
-          await taskService.addTask({
-            ...payload,
-            isDeleted: false,
-            status: columns.filter((item) => item.id === 0)[0].title,
-            userId: user.uid,
-            image: result,
-            order: tasks.length,
-          });
+          dispatch(
+            addTask({
+              ...payload,
+              isDeleted: false,
+              status: columns.filter((item) => item.id === 0)[0].title,
+              userId: user.uid,
+              image: result,
+              order: tasks.length,
+            })
+          );
         } else {
-          await taskService.updateTask(
-            { ...payload, image: values.file ? result : values.image },
-            values.id
+          dispatch(
+            updateTask({
+              item: { ...payload, image: values.file ? result : values.image },
+              id: values.id,
+            })
           );
         }
         handleCloseModal();
-        dispatch(fetchTasks(user?.uid))
+        dispatch(fetchTasks(user?.uid));
       } catch (error) {
         alert(JSON.stringify(error));
       }
@@ -327,9 +331,7 @@ const AddTaskModal = ({
             </button>
           </form>
         </div>
-        {isSubmitting && (
-          <LoadingComponent />
-        )}
+        {isSubmitting && <LoadingComponent />}
       </div>
     </div>
   );

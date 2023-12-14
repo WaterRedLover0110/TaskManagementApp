@@ -14,7 +14,7 @@ class TaskService {
         });
       });
 
-      return res.sort((a: number, b: number) => a - b);
+      return res.filter((item: KanbanItemTypes) => item.isDeleted === false).sort((a: KanbanItemTypes, b: KanbanItemTypes) => a.order - b.order);
     } catch (error) {
       throw error;
     }
@@ -31,7 +31,7 @@ class TaskService {
     }
   }
 
-  updateItem = async(source: KanbanItemTypes, destinationBefore: number, destinationNext: number, destinationStatus: string) => {
+  moveTask = async(source: KanbanItemTypes, destinationBefore: number, destinationNext: number, destinationStatus: string) => {
     try {
       const destBeforeOrder = destinationBefore;
       const destNextOrder = destinationNext;
@@ -47,6 +47,16 @@ class TaskService {
   updateTask = async (item: any, id: string) => {
     try {
       await updateDoc(doc(db, 'tasks', id), item);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  deleteTask = async (id: string) => {
+    try {
+      await updateDoc(doc(db, 'tasks', id), {
+        isDeleted: true
+      })
     } catch (error) {
       throw error;
     }
