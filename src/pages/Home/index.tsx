@@ -16,6 +16,7 @@ import { fetchTypes } from "../../store/types";
 import { fetchUrgency } from "../../store/urgency";
 import { fetchColumns } from "../../store/columns";
 import { Header, SideBar } from "../../components";
+import LoadingComponent from "../../components/LoadingComponent";
 
 const initialValues = {
   title: "",
@@ -32,6 +33,7 @@ const initialValues = {
 const Home = () => {
   const dispatch = useDispatch();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isNewModal, setIsNewModal] = useState(false);
 
   const user: any = useGetUser();
@@ -41,10 +43,12 @@ const Home = () => {
   const kanbanTasks: KanbanDataTypes = useGetKanbanTasks();
 
   useEffect(() => {
+    setIsLoading(true);
     dispatch(fetchTasks(user?.uid));
     dispatch(fetchTypes('types/fetchTypes'));
     dispatch(fetchUrgency('urgency/fetchUrgency'));
     dispatch(fetchColumns('columns/fetchColumns'));
+    setIsLoading(false);
   }, [])
 
   useEffect(() => {
@@ -236,6 +240,7 @@ const Home = () => {
         </div>
       </div>
       {isNewModal && <AddTaskModal handleCloseModal={handleCloseModal} initialValues={initialValues}/>}
+      {isLoading && <LoadingComponent />}
     </div>
   );
 };
