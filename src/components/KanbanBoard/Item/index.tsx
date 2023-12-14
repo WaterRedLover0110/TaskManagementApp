@@ -110,7 +110,7 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
               </div>
             </div>
             {data.image !== "" && (
-              <img src={data.image} className="rounded-xl" alt="Image" />
+              <img src={data.image} className="rounded-xl" alt="Task Image" />
             )}
             <div className="kanban-content mb-2">
               <p className="text-indigo-500 text-base py-2 dark:text-gray-500">
