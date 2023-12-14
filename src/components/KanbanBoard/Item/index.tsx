@@ -98,21 +98,11 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
                       className="py-2 text-sm text-gray-700 dark:text-gray-200"
                       aria-labelledby="dropdownDividerButton"
                     >
-                      <li onClick={handleEdit}>
-                        <a
-                          href="#"
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                        >
-                          Edit
-                        </a>
+                      <li onClick={handleEdit} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                        Edit
                       </li>
-                      <li onClick={handleDelete}>
-                        <a
-                          href="#"
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Delete
-                        </a>
+                      <li onClick={handleDelete} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        Delete
                       </li>
                     </ul>
                   </div>

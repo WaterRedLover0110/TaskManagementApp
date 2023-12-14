@@ -19,11 +19,11 @@ const FormExtra = () => {
           </label>
         </div>
       </div>
-      <a
-        className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+      <span
+        className="text-sm font-medium text-primary-600 hover:underline dark:text-gray-300"
       >
         Forgot password?
-      </a>
+      </span>
     </div>
   );
 };
