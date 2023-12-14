@@ -20,7 +20,7 @@ const SignUp = () => {
     validateOnChange: true,
     onSubmit: async () => {
       try {
-        const result = await authService.signUp(values);
+        await authService.signUp(values);
         alert('Successfully Registered');
         navigate('/signin');
       } catch (error) {

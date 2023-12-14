@@ -1,7 +1,6 @@
 const FormHeader = () => {
   return (
-    <a
-      href="#"
+    <div
       className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
     >
       <img
@@ -10,7 +9,7 @@ const FormHeader = () => {
         alt="logo"
       />
       Watered
-    </a>
+    </div>
   );
 };
 

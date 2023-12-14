@@ -4,7 +4,6 @@ import { getKanbanTasks, getTasks } from "../store/tasks";
 import { getColumns } from "../store/columns";
 import { getTypes } from "../store/types";
 import { getUrgency } from "../store/urgency";
-import { KanbanUserTypes } from "../types";
 
 export const useGetTasks = () => {
   const tasks = useSelector((state: RootState) => getTasks(state));

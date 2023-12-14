@@ -1,13 +1,18 @@
 import { Draggable, DraggableProvided } from "@hello-pangea/dnd";
 import { KanbanItemProps, KanbanSubTaskRecordTypes } from "../../../types";
 import { useMemo, useState } from "react";
-import { useGetTypes, useGetUrgency } from "../../../hooks";
+import { useGetTypes, useGetUrgency, useGetUser } from "../../../hooks";
 import AddTaskModal from "../../AddTaskModal";
+import { useDispatch } from "react-redux";
+import { deleteTask, fetchTasks } from "../../../store/tasks";
 
 const KanbanItem = ({ data, index }: KanbanItemProps) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const user: any = useGetUser();
   const urgencyList = useGetUrgency();
   const typesList = useGetTypes();
 
@@ -19,14 +24,15 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
     () => calculateCompletedSubTask(data.subTasks),
     [data.subTasks]
   );
+
   const urgency = useMemo(
     () => urgencyList.filter((item) => item.value === data.urgency)[0]?.label,
-    [urgencyList]
+    [urgencyList, data.urgency]
   );
 
   const type = useMemo(
     () => typesList.filter((item) => item.value === data.type)[0]?.label,
-    [typesList]
+    [typesList, data.type]
   );
 
   const handleMenuClick = () => {
@@ -39,6 +45,8 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
   };
 
   const handleDelete = () => {
+    dispatch(deleteTask(data.id));
+    dispatch(fetchTasks(user?.uid));
     setShowMenu(false);
   };
 
@@ -90,21 +98,11 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
                       className="py-2 text-sm text-gray-700 dark:text-gray-200"
                       aria-labelledby="dropdownDividerButton"
                     >
-                      <li onClick={handleEdit}>
-                        <a
-                          href="#"
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
-                        >
-                          Edit
-                        </a>
+                      <li onClick={handleEdit} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                        Edit
                       </li>
-                      <li onClick={handleDelete}>
-                        <a
-                          href="#"
-                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                          Delete
-                        </a>
+                      <li onClick={handleDelete} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        Delete
                       </li>
                     </ul>
                   </div>
@@ -112,7 +110,7 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
               </div>
             </div>
             {data.image !== "" && (
-              <img src={data.image} className="rounded-xl" alt="Image" />
+              <img src={data.image} className="rounded-xl" alt="Task Image" />
             )}
             <div className="kanban-content mb-2">
               <p className="text-indigo-500 text-base py-2 dark:text-gray-500">

@@ -14,10 +14,13 @@ const userSlice = createSlice({
     },
     toogleTheme: (state, action) => {
       state.isDarkMode = action.payload;
+    },
+    removeUser: (state) => {
+      state.value = null;
     }
   },
 });
 
-export const { setUser, toogleTheme } = userSlice.actions;
+export const { setUser, toogleTheme, removeUser } = userSlice.actions;
 
 export default userSlice.reducer;

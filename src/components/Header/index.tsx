@@ -1,10 +1,13 @@
 import { useDispatch } from "react-redux";
 import { useGetTheme, useGetUser } from "../../hooks";
-import { KanbanUserTypes } from "../../types";
-import { toogleTheme } from "../../store/user";
+import { removeUser, toogleTheme } from "../../store/user";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [showMenu, setShowMenu] = useState(false);
 
   const user: any = useGetUser();
   const isDarkMode: boolean = useGetTheme();
@@ -13,6 +16,15 @@ const Header = () => {
 
   const handleThemeChange = () => {
     dispatch(toogleTheme(!isDarkMode));
+  };
+
+  const handleLogout = () => {
+    dispatch(removeUser());
+    navigate("/signin");
+  };
+
+  const handleShowMenu = () => {
+    setShowMenu(!showMenu);
   };
 
   return (
@@ -58,7 +70,29 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="h-10 w-10 rounded-full cursor-pointer bg-gray-200 dark:bg-gray-500 border-2 border-blue-400 dark:border-gray-600"></div>
+        <div
+          className="h-10 w-10 rounded-full cursor-pointer bg-gray-200 dark:bg-gray-500 border-2 border-blue-400 dark:border-gray-600"
+          onClick={handleShowMenu}
+        >
+          {showMenu && (
+            <div
+              id="dropdownDivider"
+              className="absolute right-2 top-16 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-800 dark:divide-gray-600"
+            >
+              <ul
+                className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownDividerButton"
+              >
+                <li className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                  Profile
+                </li>
+                <li onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  Logout
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

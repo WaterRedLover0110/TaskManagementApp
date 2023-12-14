@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, orderBy, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../utils/firebase";
 import { KanbanItemTypes } from "../types";
 
@@ -14,7 +14,7 @@ class TaskService {
         });
       });
 
-      return res.sort((a: number, b: number) => a - b);
+      return res.filter((item: KanbanItemTypes) => item.isDeleted === false).sort((a: KanbanItemTypes, b: KanbanItemTypes) => a.order - b.order);
     } catch (error) {
       throw error;
     }
@@ -22,23 +22,25 @@ class TaskService {
 
   addTask = async (item: any) => {
     try {
-      const docRef = await addDoc(collection(db, 'tasks'), {
+      await addDoc(collection(db, 'tasks'), {
         ...item
       });
 
+      return true;
     } catch (error) {
       throw error;
     }
   }
 
-  updateItem = async(source: KanbanItemTypes, destinationBefore: number, destinationNext: number, destinationStatus: string) => {
+  moveTask = async(source: KanbanItemTypes, destinationBefore: number, destinationNext: number, destinationStatus: string) => {
     try {
       const destBeforeOrder = destinationBefore;
       const destNextOrder = destinationNext;
-      const sourceRef = await updateDoc(doc(db, 'tasks', source.id), {
+      await updateDoc(doc(db, 'tasks', source.id), {
         order: (destBeforeOrder + destNextOrder) / 2,
         status: destinationStatus
       });
+      return true;
     } catch (error) {
       throw error;
     }
@@ -47,6 +49,16 @@ class TaskService {
   updateTask = async (item: any, id: string) => {
     try {
       await updateDoc(doc(db, 'tasks', id), item);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  deleteTask = async (id: string) => {
+    try {
+      await updateDoc(doc(db, 'tasks', id), {
+        isDeleted: true
+      })
     } catch (error) {
       throw error;
     }

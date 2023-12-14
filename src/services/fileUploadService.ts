@@ -13,6 +13,7 @@ class FileUploaderService {
         (snapshot) => {
           const percent =
             Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`${percent}% is uploaded`);
         },
         (error) => reject(error),
         async () => {

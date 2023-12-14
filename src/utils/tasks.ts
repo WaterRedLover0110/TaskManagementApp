@@ -1,4 +1,4 @@
-import { KanbanColumnTypes, KanbanDataTypes, KanbanItemTypes } from "../types";
+import { KanbanDataTypes, KanbanItemTypes } from "../types";
 
 export const generateKanbanData = (
   tasks: KanbanItemTypes[]
