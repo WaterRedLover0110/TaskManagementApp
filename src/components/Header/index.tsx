@@ -3,6 +3,7 @@ import { useGetTheme, useGetUser } from "../../hooks";
 import { removeUser, toogleTheme } from "../../store/user";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { DarkIcon, LightIcon } from "../../icons";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,8 @@ const Header = () => {
       <div className="flex flex-shrink-0 items-center space-x-3 text-white">
         <div className="flex flex-col justify-center ml-3">
           <button onClick={handleThemeChange}>
-            
+            <DarkIcon />
+            <LightIcon />
           </button>
         </div>
         <div className="flex flex-col items-end ">
