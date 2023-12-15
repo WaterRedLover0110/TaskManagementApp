@@ -1,22 +1,29 @@
 import { useEffect, useState } from "react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
-import { KanbanColumn } from "../../components/KanbanBoard";
+
 import {
   KanbanColumnTypes,
   KanbanDataTypes,
   KanbanItemTypes,
 } from "../../types";
-import { useGetColumns, useGetKanbanTasks, useGetTasks, useGetUser } from "../../hooks";
+import {
+  useGetColumns,
+  useGetKanbanTasks,
+  useGetLoading,
+  useGetTasks,
+  useGetUser,
+} from "../../hooks";
+
 import { generateKanbanData } from "../../utils/tasks";
 import { useDispatch } from "react-redux";
 
 import { fetchTasks, setKanbanData, moveTask } from "../../store/tasks";
-import AddTaskModal from "../../components/AddTaskModal";
 import { fetchTypes } from "../../store/types";
 import { fetchUrgency } from "../../store/urgency";
 import { fetchColumns } from "../../store/columns";
-import { Header, SideBar } from "../../components";
-import LoadingComponent from "../../components/LoadingComponent";
+
+import { Header, SideBar, LoadingComponent, AddTaskModal, KanbanColumn } from "../../components";
+import { PlusIcon, SearchIcon } from "../../icons";
 
 const initialValues = {
   title: "",
@@ -28,12 +35,11 @@ const initialValues = {
   subTasks: [],
   subTaskText: "",
   file: null,
-}
+};
 
 const Home = () => {
   const dispatch = useDispatch();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isNewModal, setIsNewModal] = useState(false);
 
   const user: any = useGetUser();
@@ -42,14 +48,14 @@ const Home = () => {
 
   const kanbanTasks: KanbanDataTypes = useGetKanbanTasks();
 
+  const isLoading: boolean = useGetLoading();
+
   useEffect(() => {
-    setIsLoading(true);
     dispatch(fetchTasks(user?.uid));
-    dispatch(fetchTypes('types/fetchTypes'));
-    dispatch(fetchUrgency('urgency/fetchUrgency'));
-    dispatch(fetchColumns('columns/fetchColumns'));
-    setIsLoading(false);
-  }, [dispatch, user?.uid])
+    dispatch(fetchTypes("types/fetchTypes"));
+    dispatch(fetchUrgency("urgency/fetchUrgency"));
+    dispatch(fetchColumns("columns/fetchColumns"));
+  }, [dispatch, user?.uid]);
 
   useEffect(() => {
     if (tasks.length && columns.length) {
@@ -170,27 +176,13 @@ const Home = () => {
               Search
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-500 dark:text-gray-400">
+                <SearchIcon />
               </div>
               <input
                 type="search"
                 id="default-search"
-                className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none"
                 placeholder="Search Tasks..."
                 required
               />
@@ -207,20 +199,7 @@ const Home = () => {
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             onClick={handleNew}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-4 h-4 mr-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
+            <PlusIcon />
             New Task
           </button>
         </div>
@@ -239,7 +218,12 @@ const Home = () => {
           </DragDropContext>
         </div>
       </div>
-      {isNewModal && <AddTaskModal handleCloseModal={handleCloseModal} initialValues={initialValues}/>}
+      {isNewModal && (
+        <AddTaskModal
+          handleCloseModal={handleCloseModal}
+          initialValues={initialValues}
+        />
+      )}
       {isLoading && <LoadingComponent />}
     </div>
   );

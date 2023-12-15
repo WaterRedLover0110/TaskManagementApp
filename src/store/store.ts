@@ -16,6 +16,7 @@ import {
 import storage from "redux-persist/lib/storage";
 
 import userReducer from "./user";
+import { globalSlice } from "./global";
 
 const persistConfig = {
   key: "root",
@@ -32,6 +33,7 @@ export const store = configureStore({
     types: typeSlice.reducer,
     urgency: urgencySlice.reducer,
     user: userPersistedReducer,
+    global: globalSlice.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

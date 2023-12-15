@@ -5,7 +5,7 @@ import type { RootState } from "../store";
 import urgencyService from "../../services/urgencyService";
 
 export const fetchUrgency = createAsyncThunk<KanbanUrgencyTypes[], string>(
-  "urgency/fetchUrgency",
+  "urgency/fetchUrgency:load",
   async () => {
     try {
       const result = await urgencyService.getAll();

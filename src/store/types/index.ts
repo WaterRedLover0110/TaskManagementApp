@@ -5,7 +5,7 @@ import type { RootState } from "../store";
 import typeService from "../../services/typeService";
 
 export const fetchTypes = createAsyncThunk<KanbanTypeTypes[], string>(
-  "types/fetchTypes",
+  "types/fetchTypes:load",
   async () => {
     try {
       const result = await typeService.getAll();

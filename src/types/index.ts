@@ -48,6 +48,8 @@ export interface FormImageUploaderProps {
   name: string;
   id: string;
   handleChange: any;
+  src: string;
+  fileName: string;
 }
 
 export interface KanbanSubTaskItemTypes {
@@ -66,6 +68,7 @@ export interface KanbanItemTypes {
   description: string;
   subTasks: KanbanSubTaskRecordTypes[];
   image: string;
+  fileName:string;
   urgency: string;
   user: string;
   status: number;

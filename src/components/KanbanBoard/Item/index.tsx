@@ -1,10 +1,14 @@
-import { Draggable, DraggableProvided } from "@hello-pangea/dnd";
-import { KanbanItemProps, KanbanSubTaskRecordTypes } from "../../../types";
 import { useMemo, useState } from "react";
-import { useGetTypes, useGetUrgency, useGetUser } from "../../../hooks";
-import AddTaskModal from "../../AddTaskModal";
 import { useDispatch } from "react-redux";
+import { Draggable, DraggableProvided } from "@hello-pangea/dnd";
+
+import { KanbanItemProps, KanbanSubTaskRecordTypes } from "../../../types";
+import { useGetTypes, useGetUrgency, useGetUser } from "../../../hooks";
 import { deleteTask, fetchTasks } from "../../../store/tasks";
+
+import Image from "../../Image";
+import AddTaskModal from "../../AddTaskModal";
+import { MenuIcon, CheckIcon} from "../../../icons";
 
 const KanbanItem = ({ data, index }: KanbanItemProps) => {
   const [showMenu, setShowMenu] = useState(false);
@@ -74,20 +78,7 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
                   onClick={handleMenuClick}
                   className="dark:text-gray-300"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
-                    />
-                  </svg>
+                  <MenuIcon />
                 </button>
                 {showMenu && (
                   <div
@@ -98,10 +89,16 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
                       className="py-2 text-sm text-gray-700 dark:text-gray-200"
                       aria-labelledby="dropdownDividerButton"
                     >
-                      <li onClick={handleEdit} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                      <li
+                        onClick={handleEdit}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+                      >
                         Edit
                       </li>
-                      <li onClick={handleDelete} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <li
+                        onClick={handleDelete}
+                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
                         Delete
                       </li>
                     </ul>
@@ -110,7 +107,8 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
               </div>
             </div>
             {data.image !== "" && (
-              <img src={data.image} className="rounded-xl" alt="Task Image" />
+              // <img src={data.image} className="rounded-xl" alt="Task Image" />
+              <Image src={data.image} />
             )}
             <div className="kanban-content mb-2">
               <p className="text-indigo-500 text-base py-2 dark:text-gray-500">
@@ -122,7 +120,9 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
             </div>
             {!!data.dueDate && (
               <div className="kanban-date border-solid border border-gray-200 dark:border-gray-600 inline-block rounded-lg px-2 mb-2">
-                <p className="text-sm text-indigo-500 dark:text-gray-400 inline">{data.dueDate}</p>
+                <p className="text-sm text-indigo-500 dark:text-gray-400 inline">
+                  {data.dueDate}
+                </p>
               </div>
             )}
             <br />
@@ -131,26 +131,15 @@ const KanbanItem = ({ data, index }: KanbanItemProps) => {
                 {" "}
                 {urgency}
               </div>
-              <div className="kanban-subtask-state text-gray-500 flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className={`w-6 h-6 inline ${
-                    completedSubTask === data.subTasks.length &&
-                    completedSubTask !== 0
-                      ? "text-green-500"
-                      : ""
-                  }`}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+              <div
+                className={`kanban-subtask-state text-gray-500 flex items-center ${
+                  completedSubTask === data.subTasks.length &&
+                  completedSubTask !== 0
+                    ? "text-green-500"
+                    : ""
+                }`}
+              >
+                <CheckIcon />
                 <span
                   className={`ml-0.5 ${
                     completedSubTask === data.subTasks.length &&

@@ -6,7 +6,7 @@ import type { RootState } from "../store";
 import type { KanbanColumnTypes } from "../../types";
 
 export const fetchColumns = createAsyncThunk<KanbanColumnTypes[], string>(
-  "columns/fetchColumns",
+  "columns/fetchColumns:load",
   async () => {
     try {
       const result = await columnService.getAll();
