@@ -17,11 +17,14 @@ import {
   useGetUrgency,
   useGetUser,
 } from "../../hooks";
-import FormDateSelect from "../FormDateSelect";
+
 import fileUploaderService from "../../services/fileUploadService";
 import { useDispatch } from "react-redux";
 import { addTask, fetchTasks, updateTask } from "../../store/tasks";
+import FormDateSelect from "../FormDateSelect";
 import LoadingComponent from "../LoadingComponent";
+import { CloseIcon, EditIcon } from "../../icons";
+import PlusIcon from "../../icons/PlusIcon";
 
 const AddTaskModal = ({
   handleCloseModal,
@@ -122,21 +125,7 @@ const AddTaskModal = ({
               className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
               onClick={handleCloseModal}
             >
-              <svg
-                className="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
+              <CloseIcon />
               <span className="sr-only">Close modal</span>
             </button>
           </div>
@@ -174,16 +163,10 @@ const AddTaskModal = ({
                   label="Image"
                   name="file"
                   id="file"
+                  src={values.file ? URL.createObjectURL(values.file) : values.image}
                   handleChange={handleUpload}
+                  fileName={values.fileName}
                 />
-                {values.file && (
-                  <input
-                    name="fileName"
-                    value={values.fileName}
-                    readOnly
-                    disabled
-                  />
-                )}
               </div>
               <div className="col-span-3 sm:col-span-1">
                 <FormDateSelect
@@ -274,18 +257,7 @@ const AddTaskModal = ({
                     className="flex items-center w-full rounded-lg font-medium text-sm text-center p-2.5 dark:bg-gray-600 dark:text-gray-300"
                     onClick={handleNewSubTask}
                   >
-                    <svg
-                      className="me-1 -ms-1 w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
+                    <PlusIcon />
                     Add new sub task
                   </button>
                 </div>
@@ -293,37 +265,13 @@ const AddTaskModal = ({
             </div>
             <button
               type="submit"
-              className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-red-800"
+              className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-blue-400 dark:disabled:bg-blue-400"
               disabled={!isValid}
             >
               {isEdit ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  className="me-1 -ms-1 w-5 h-5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                  />
-                </svg>
+                <EditIcon />
               ) : (
-                <svg
-                  className="me-1 -ms-1 w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
+                <PlusIcon />
               )}
               {isEdit ? "Update task" : "Add new task"}
             </button>

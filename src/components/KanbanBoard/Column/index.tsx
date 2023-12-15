@@ -1,3 +1,4 @@
+import MenuIcon from "../../../icons/MenuIcon";
 import {
   KanbanItemTypes,
   KanbanRowHeaderProps,
@@ -11,20 +12,7 @@ const KanbanRowHeader = ({ text }: KanbanRowHeaderProps) => {
     <div className="flex justify-between items-center px-4 py-2 w-full bg-white rounded-2xl text-lg dark:bg-gray-800">
       <p className="leading-8 text-indigo-500 dark:text-gray-400 text-sm">{text}</p>
       <button className="hover:bg-slate-300 dark:hover:bg-slate-600 dark:hover:text-gray-400 dark:text-gray-200 p-2 rounded inline-flex items-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
-          />
-        </svg>
+        <MenuIcon />
       </button>
     </div>
   );

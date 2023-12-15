@@ -1,7 +1,7 @@
 const LoadingComponent = () => {
   return (
-    <div className="absolute left-0 top-0 w-full h-[100%] ">asdfasdf
-      <div className="bg-gray-700 opacity-20 w-full h-full"></div>
+    <div className="absolute left-0 top-0 w-full h-[100%] ">
+      <div className="bg-gray-700 opacity-60 w-full h-full"></div>
       <div
         role="status"
         className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2"

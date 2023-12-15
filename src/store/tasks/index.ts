@@ -7,7 +7,7 @@ import type { KanbanItemTypes, KanbanDataTypes } from "../../types";
 import type { RootState } from "../store";
 
 export const fetchTasks = createAsyncThunk<KanbanItemTypes[], string>(
-  "tasks/fetchTasks",
+  "tasks/fetchTasks:load",
   async (uid: string) => {
     try {
       const result = await taskService.getAll(uid);
@@ -19,7 +19,7 @@ export const fetchTasks = createAsyncThunk<KanbanItemTypes[], string>(
 );
 
 export const moveTask = createAsyncThunk<boolean, any>(
-  "tasks/updateTasks", 
+  "tasks/updateTasks:load",
   async(updatedData) => {
     try {
       const {source, destinationBefore, destinationNext, destinationStatus}: any = updatedData;
@@ -32,7 +32,7 @@ export const moveTask = createAsyncThunk<boolean, any>(
 )
 
 export const addTask = createAsyncThunk<boolean, any>(
-  "tasks/addTask", 
+  "tasks/addTask:load", 
   async(item) => {
     try {
       await taskService.addTask(item);
@@ -44,7 +44,7 @@ export const addTask = createAsyncThunk<boolean, any>(
 )
 
 export const updateTask = createAsyncThunk<boolean, any>(
-  "tasks/updateTask",
+  "tasks/updateTask:load",
   async ({item, id}) => {
     try {
       await taskService.updateTask(item, id);
@@ -56,7 +56,7 @@ export const updateTask = createAsyncThunk<boolean, any>(
 )
 
 export const deleteTask = createAsyncThunk<boolean, any>(
-  "tasks/deleteTask",
+  "tasks/deleteTask:load",
   async(id) => {
     try {
       await taskService.deleteTask(id);

@@ -40,8 +40,15 @@ export const useGetUser = () => {
 
   return user;
 }
+
 export const useGetTheme = () => {
   const isDarkMode = useSelector((state: RootState) => state.user.isDarkMode);
   
   return !!isDarkMode;
+}
+
+export const useGetLoading = () => {
+  const isLoading = useSelector((state: RootState) => state.global.loading);
+
+  return isLoading;
 }
